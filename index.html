@@ -408,18 +408,34 @@
     function getChannelLogo(name) {
       if (!name) return null;
       const clean = name.toLowerCase().trim();
+      
+      // Exact matches first
       if (LOGOS[clean]) return LOGOS[clean];
-      if (clean.startsWith('premiere')) return LOGOS['premiere'];
-      if (clean.startsWith('sportv')) return LOGOS['sportv'];
-      if (clean.startsWith('espn')) return LOGOS['espn'];
-      if (clean.startsWith('globo')) return LOGOS['globo'];
-      if (clean.startsWith('sbt')) return LOGOS['sbt'];
-      if (clean.startsWith('tnt')) return LOGOS['tnt'];
-      if (clean.startsWith('space')) return LOGOS['space'];
-      if (clean.startsWith('record')) return LOGOS['record tv'];
-      if (clean.startsWith('band tv')) return LOGOS['band tv'];
-      if (clean.startsWith('bandsports')) return LOGOS['bandsports'];
-      if (clean.startsWith('combate')) return LOGOS['combate'];
+      
+      // Substring matches
+      if (clean.includes('premiere')) return LOGOS['premiere'];
+      if (clean.includes('sportv')) {
+        if (clean.includes('2')) return LOGOS['sportv 2'];
+        if (clean.includes('3')) return LOGOS['sportv 3'];
+        return LOGOS['sportv'];
+      }
+      if (clean.includes('espn')) {
+        if (clean.includes('2')) return LOGOS['espn 2'];
+        if (clean.includes('3')) return LOGOS['espn 3'];
+        if (clean.includes('4')) return LOGOS['espn 4'];
+        return LOGOS['espn'];
+      }
+      if (clean.includes('globo') || clean.includes('ge fast')) return LOGOS['globo'];
+      if (clean.includes('sbt')) return LOGOS['sbt'];
+      if (clean.includes('tnt')) return LOGOS['tnt'];
+      if (clean.includes('space')) return LOGOS['space'];
+      if (clean.includes('record')) return LOGOS['record tv'];
+      if (clean.includes('band tv') || clean.includes('band')) {
+        if (clean.includes('sports')) return LOGOS['bandsports'];
+        return LOGOS['band tv'];
+      }
+      if (clean.includes('combate')) return LOGOS['combate'];
+      
       return null;
     }
 
