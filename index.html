@@ -91,6 +91,15 @@
     /* Skeleton */
     .skeleton { background:linear-gradient(90deg,#211e27 25%,#2c2832 50%,#211e27 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:12px; }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* Hero transition & animations */
+    #hero-bg { transition: opacity 0.8s ease-in-out; }
+    .animate-fade-in { animation: fadeIn 0.6s ease-out both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Indicator dots */
+    .indicator-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); cursor: pointer; transition: all 0.3s; }
+    .indicator-dot.active { width: 24px; border-radius: 4px; background: #d0bcff; }
   </style>
 </head>
 <body class="bg-background text-on-background overflow-x-hidden relative">
@@ -143,7 +152,9 @@
         <span class="bg-primary-container text-on-primary-container text-[10px] font-extrabold px-2 py-1 rounded shadow-[0_0_12px_rgba(208,188,255,0.4)] tracking-widest">AO VIVO</span>
         <span class="text-xs font-semibold tracking-widest text-outline uppercase" id="hero-source">TV Livre</span>
       </div>
-      <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 tracking-tighter drop-shadow-2xl text-white leading-none" id="hero-title">TV Livre</h1>
+      <div class="h-16 md:h-24 flex items-center mb-6" id="hero-title-container">
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter drop-shadow-2xl text-white leading-none animate-fade-in" id="hero-title">TV Livre</h1>
+      </div>
       <div class="flex items-center gap-4 mb-6 text-sm font-medium text-on-surface-variant drop-shadow-md">
         <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-sm">star</span> 4.9</span>
         <span>|</span>
@@ -165,6 +176,8 @@
         </button>
       </div>
     </div>
+    <!-- Slide indicators -->
+    <div class="absolute bottom-6 right-4 md:right-12 z-30 flex gap-2" id="hero-indicators"></div>
   </header>
 
   <!-- ========== MAIN CONTENT ========== -->
@@ -317,7 +330,11 @@
       currentIndex: -1,
       hls: null,
       activeTab: 'home',
+      featuredChannels: [],
+      currentHeroIndex: 0,
+      heroRotationInterval: null,
     };
+
 
     // ======================== CATEGORIES ========================
     const CAT = {
@@ -349,6 +366,70 @@
       if (CAT.aberta(c)) return 'aberta';
       if (CAT.filmes(c)) return 'filmes';
       return 'outros';
+    }
+
+    const LOGOS = {
+      'sportv': 'https://upload.wikimedia.org/wikipedia/commons/e/ec/SporTV_logo.svg',
+      'sportv 2': 'https://upload.wikimedia.org/wikipedia/commons/7/70/SporTV2_logo.png',
+      'sportv 3': 'https://upload.wikimedia.org/wikipedia/commons/3/30/SporTV3_logo.png',
+      'espn': 'https://upload.wikimedia.org/wikipedia/commons/a/a2/ESPN_wordmark.svg',
+      'espn 2': 'https://upload.wikimedia.org/wikipedia/commons/e/e8/ESPN2.svg',
+      'espn 3': 'https://upload.wikimedia.org/wikipedia/commons/1/15/ESPN3_logo.png',
+      'espn 4': 'https://upload.wikimedia.org/wikipedia/commons/f/fb/ESPN4.png',
+      'globo': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
+      'globo sp': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
+      'globo rj': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
+      'globo bahia': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
+      'ge fast': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
+      'sbt': 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Logo_SBT_2024.png',
+      'record tv': 'https://upload.wikimedia.org/wikipedia/commons/9/91/Record_TV_logo.png',
+      'band tv': 'https://upload.wikimedia.org/wikipedia/commons/8/87/Band_TV_logo.png',
+      'bandsports': 'https://upload.wikimedia.org/wikipedia/commons/9/98/Bandsports_2016.svg',
+      'tnt': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/TNT_Logo_2016.svg',
+      'space': 'https://upload.wikimedia.org/wikipedia/commons/8/85/Canal_Space.png',
+      'combate': 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Logo_Canal_Combate.png',
+      'premiere': 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Logo_premiere.png',
+    };
+
+    const BACKDROPS = {
+      'sportv': 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80',
+      'espn': 'https://images.unsplash.com/photo-1540747737956-3787257af287?w=1200&q=80',
+      'premiere': 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&q=80',
+      'globo': 'https://images.unsplash.com/photo-1598257006458-087169a1f08d?w=1200&q=80',
+      'sbt': 'https://images.unsplash.com/photo-1516280440614-37939bbacd6a?w=1200&q=80',
+      'record tv': 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1200&q=80',
+      'band tv': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80',
+      'bandsports': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80',
+      'tnt': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&q=80',
+      'space': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1200&q=80',
+      'combate': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&q=80'
+    };
+
+    function getChannelLogo(name) {
+      if (!name) return null;
+      const clean = name.toLowerCase().trim();
+      if (LOGOS[clean]) return LOGOS[clean];
+      if (clean.startsWith('premiere')) return LOGOS['premiere'];
+      if (clean.startsWith('sportv')) return LOGOS['sportv'];
+      if (clean.startsWith('espn')) return LOGOS['espn'];
+      if (clean.startsWith('globo')) return LOGOS['globo'];
+      if (clean.startsWith('sbt')) return LOGOS['sbt'];
+      if (clean.startsWith('tnt')) return LOGOS['tnt'];
+      if (clean.startsWith('space')) return LOGOS['space'];
+      if (clean.startsWith('record')) return LOGOS['record tv'];
+      if (clean.startsWith('band tv')) return LOGOS['band tv'];
+      if (clean.startsWith('bandsports')) return LOGOS['bandsports'];
+      if (clean.startsWith('combate')) return LOGOS['combate'];
+      return null;
+    }
+
+    function getChannelBackdrop(name) {
+      if (!name) return 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80';
+      const clean = name.toLowerCase().trim();
+      for (const key in BACKDROPS) {
+        if (clean.includes(key)) return BACKDROPS[key];
+      }
+      return 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80';
     }
 
     function sanitizeName(name) {
@@ -411,14 +492,90 @@
       renderRail('rail-premiere', groups.premiere, 'premiere', 'w-56 md:w-64', 'aspect-[4/3]');
       renderRail('rail-outros', groups.outros, 'outros', 'w-64 md:w-72', 'aspect-video');
 
-      // Setup hero
-      if (state.channels.length > 0) {
-        const sports = groups.esportes;
-        const hero = sports.length > 0 ? sports[0] : state.channels[0];
-        document.getElementById('hero-title').textContent = hero.nome;
-        document.getElementById('hero-source').textContent = hero.iframe ? 'Stream HD' : (hero.tipo || 'HLS').toUpperCase();
-        document.getElementById('hero-play-btn').onclick = () => openPlayer(hero);
+      setupHeroCarousel(groups);
+    }
+
+    function setupHeroCarousel(groups) {
+      const featured = [];
+      const addFeatured = (channel) => {
+        if (channel && !featured.some(f => f.nome === channel.nome)) {
+          featured.push(channel);
+        }
+      };
+
+      if (groups.esportes[0]) addFeatured(groups.esportes[0]);
+      if (groups.aberta[0]) addFeatured(groups.aberta[0]);
+      if (groups.esportes[1]) addFeatured(groups.esportes[1]);
+      if (groups.aberta[1]) addFeatured(groups.aberta[1]);
+      if (groups.filmes[0]) addFeatured(groups.filmes[0]);
+      if (groups.premiere[0]) addFeatured(groups.premiere[0]);
+
+      state.featuredChannels = featured.slice(0, 5);
+
+      const indicatorsContainer = document.getElementById('hero-indicators');
+      if (indicatorsContainer) {
+        indicatorsContainer.innerHTML = state.featuredChannels.map((_, idx) => 
+          `<div class="indicator-dot ${idx === 0 ? 'active' : ''}" onclick="jumpToHeroSlide(${idx})"></div>`
+        ).join('');
       }
+
+      state.currentHeroIndex = 0;
+      updateHeroSlide(0);
+      startHeroRotationTimer();
+    }
+
+    function updateHeroSlide(index) {
+      if (state.featuredChannels.length === 0) return;
+      state.currentHeroIndex = index;
+      const channel = state.featuredChannels[index];
+
+      const bg = document.getElementById('hero-bg');
+      if (bg) {
+        bg.style.opacity = 0;
+        setTimeout(() => {
+          bg.style.backgroundImage = `url('${getChannelBackdrop(channel.nome)}')`;
+          bg.style.opacity = 1;
+        }, 150);
+      }
+
+      const titleContainer = document.getElementById('hero-title-container');
+      if (titleContainer) {
+        const logoUrl = getChannelLogo(channel.nome);
+        if (logoUrl) {
+          titleContainer.innerHTML = `<img src="${logoUrl}" alt="${channel.nome}" class="h-16 md:h-24 max-w-[280px] md:max-w-[400px] object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] animate-fade-in">`;
+        } else {
+          titleContainer.innerHTML = `<h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter drop-shadow-2xl text-white leading-none animate-fade-in" id="hero-title">${channel.nome}</h1>`;
+        }
+      }
+
+      const source = document.getElementById('hero-source');
+      if (source) {
+        source.textContent = channel.iframe ? 'Stream HD' : (channel.tipo || 'HLS').toUpperCase();
+      }
+
+      const playBtn = document.getElementById('hero-play-btn');
+      if (playBtn) {
+        playBtn.onclick = () => openPlayer(channel);
+      }
+
+      const dots = document.querySelectorAll('.indicator-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === index);
+      });
+    }
+
+    function startHeroRotationTimer() {
+      clearInterval(state.heroRotationInterval);
+      state.heroRotationInterval = setInterval(() => {
+        if (state.featuredChannels.length === 0) return;
+        const next = (state.currentHeroIndex + 1) % state.featuredChannels.length;
+        updateHeroSlide(next);
+      }, 8000);
+    }
+
+    function jumpToHeroSlide(index) {
+      updateHeroSlide(index);
+      startHeroRotationTimer();
     }
 
     function renderRail(containerId, channels, catKey, widthClass, aspectClass) {
@@ -438,12 +595,17 @@
         const isFav = state.favorites.includes(c.nome);
         const idx = state.channels.indexOf(c);
 
+        const logoUrl = getChannelLogo(c.nome);
+        const cardMedia = logoUrl
+          ? `<img src="${logoUrl}" alt="${c.nome}" class="max-w-[70%] max-h-[50%] object-contain filter drop-shadow-md opacity-90 group-hover:scale-110 transition-transform duration-700">`
+          : `<span class="text-5xl opacity-80 drop-shadow-lg group-hover:scale-110 transition-transform duration-700">${emoji}</span>`;
+
         const card = document.createElement('div');
         card.className = `rail-card flex-none ${widthClass} ${aspectClass} bg-surface-container-low rounded-xl overflow-hidden relative cursor-pointer group`;
         card.onclick = () => openPlayer(c);
         card.innerHTML = `
-          <div class="w-full h-full bg-gradient-to-br ${grad} flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-            <span class="text-5xl opacity-80 drop-shadow-lg">${emoji}</span>
+          <div class="w-full h-full bg-gradient-to-br ${grad} flex items-center justify-center overflow-hidden">
+            ${cardMedia}
           </div>
           <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-90"></div>
           <div class="absolute top-2 right-2 z-20">
@@ -474,12 +636,18 @@
         const cat = channelCategory(c);
         const emojis = EMOJIS[cat] || EMOJIS.outros;
         const emoji = emojis[0];
+
+        const logoUrl = getChannelLogo(c.nome);
+        const cardMedia = logoUrl
+          ? `<img src="${logoUrl}" alt="${c.nome}" class="h-8 max-w-[80px] object-contain filter drop-shadow-sm opacity-90 group-hover:scale-105 transition-transform duration-300">`
+          : `<span class="text-2xl">${emoji}</span>`;
+
         const card = document.createElement('div');
         card.className = 'channel-grid-card bg-surface-container rounded-xl p-4 cursor-pointer relative group';
         card.onclick = () => openPlayer(c);
         card.innerHTML = `
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-2xl">${emoji}</span>
+          <div class="flex items-center justify-between mb-3 h-8">
+            ${cardMedia}
             <button class="fav-star ${isFav ? 'active text-yellow-400' : 'text-outline/40'}" onclick="event.stopPropagation(); toggleFav('${c.nome.replace(/'/g,"\\'")}'); renderChannelsGrid();">
               <span class="material-symbols-outlined text-lg">${isFav ? 'star' : 'star_border'}</span>
             </button>
@@ -515,12 +683,18 @@
       favChannels.forEach(c => {
         const cat = channelCategory(c);
         const emoji = (EMOJIS[cat] || EMOJIS.outros)[0];
+
+        const logoUrl = getChannelLogo(c.nome);
+        const cardMedia = logoUrl
+          ? `<img src="${logoUrl}" alt="${c.nome}" class="h-8 max-w-[80px] object-contain filter drop-shadow-sm opacity-90 group-hover:scale-105 transition-transform duration-300">`
+          : `<span class="text-2xl">${emoji}</span>`;
+
         const card = document.createElement('div');
         card.className = 'channel-grid-card bg-surface-container rounded-xl p-4 cursor-pointer relative group';
         card.onclick = () => openPlayer(c);
         card.innerHTML = `
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-2xl">${emoji}</span>
+          <div class="flex items-center justify-between mb-3 h-8">
+            ${cardMedia}
             <button class="fav-star active text-yellow-400" onclick="event.stopPropagation(); toggleFav('${c.nome.replace(/'/g,"\\'")}'); renderFavorites();">
               <span class="material-symbols-outlined text-lg">star</span>
             </button>
@@ -603,6 +777,9 @@
       state.currentChannel = channel;
       state.currentIndex = state.channels.indexOf(channel);
 
+      // Pause rotation
+      clearInterval(state.heroRotationInterval);
+
       const modal = document.getElementById('player-modal');
       const video = document.getElementById('player-video');
       const iframe = document.getElementById('player-iframe');
@@ -668,10 +845,15 @@
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       document.body.style.overflow = '';
+
+      // Resume rotation
+      startHeroRotationTimer();
     }
 
     function playHeroChannel() {
-      if (state.channels.length > 0) {
+      if (state.featuredChannels.length > 0) {
+        openPlayer(state.featuredChannels[state.currentHeroIndex]);
+      } else if (state.channels.length > 0) {
         const sports = state.channels.filter(CAT.esportes);
         openPlayer(sports.length > 0 ? sports[0] : state.channels[0]);
       }
