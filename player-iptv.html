@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player IPTV - Sportv</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/shaka-player@2.2.1/dist/shaka-player.compiled.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    h1 { font-size: 1.2rem; margin-bottom: 20px; color: #94a3b8; }
+    .player-container {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+    video { width: 100%; display: block; background: #000; }
+    .status {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+    }
+    .status.playing { color: #22c55e; }
+    .status.error { color: #ef4444; }
+    .btn-group {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    button:hover { background: #334155; color: white; }
+    button.active { background: #e11d48; color: white; }
+    .canais {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      max-width: 900px;
+    }
+    .canal-btn {
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .canal-btn:hover { border-color: #e11d48; color: white; }
+  </style>
+</head>
+<body>
+  <h1>📺 IPTV - Sportv & Canais</h1>
+  
+  <div class="player-container">
+    <video id="player" controls autoplay></video>
+  </div>
+  
+  <div class="status" id="status">⏳ Carregando...</div>
+  
+  <div class="canais" id="canais"></div>
+
+  <div class="btn-group">
+    <button onclick="togglePlay()">⏯ Play / Pause</button>
+    <button onclick="toggleMute()">🔇 Mudo</button>
+  </div>
+
+  <script>
+    // URL do Sportv descoberta via engenharia reversa
+    const urlSportv = atob('aHR0cHM6Ly9vdHRlLmxpdmUuZmx5Lnd3LmFpdi1jZG4ubmV0L2dydS1uaXRyby9saXZlL2NsaWVudHMvZGFzaC9lbmMvbTdkdXZuazJidS9vdXQvdjEvZDFhZDY5MTE4YjU2NDczMDliMWViNzIxM2FmZmRiM2QvY2VuYy5tcGQ=');
+
+    const canais = [
+      { nome: '⚽ SporTV (DASH)', url: urlSportv, tipo: 'dash' },
+      { nome: '⚽ SporTV 2 (token)', url: 'https://stm.sinalmycn.com/21003/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: '⚽ SporTV 3 (token)', url: 'https://stm.sinalmycn.com/21006/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: '🏆 GE Fast', url: 'https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8', tipo: 'hls' },
+      { nome: '🇧🇷 Globo Bahia', url: 'http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8', tipo: 'hls' },
+      { nome: '📡 Globo (Amagi)', url: 'https://amg00716-globo-amg00716c1-tcl-br-9495.playouts.now.amagi.tv/playlist.m3u8', tipo: 'hls' },
+      { nome: '⚽ Premiere 1 (token)', url: 'https://stm.sinalmycn.com/20000/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: '📺 Amazon Sat', url: 'https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8', tipo: 'hls' },
+    ];
+
+    const video = document.getElementById('player');
+    const status = document.getElementById('status');
+    let hls = null;
+    let shakaPlayer = null;
+
+    function carregarCanal(canal) {
+      status.className = 'status';
+      status.textContent = '⏳ Carregando...';
+      
+      // Limpa players anteriores
+      if (hls) { hls.destroy(); hls = null; }
+      if (shakaPlayer) { shakaPlayer.destroy(); shakaPlayer = null; }
+      video.src = '';
+
+      if (canal.tipo === 'dash') {
+        // Shaka Player para DASH
+        if (!shakaPlayer) {
+          shakaPlayer = new shaka.Player(video);
+          shakaPlayer.configure({
+            streaming: { rebufferingGoal: 5 },
+            manifest: { dash: { ignoreMinBufferTime: true } }
+          });
+        }
+        shakaPlayer.load(canal.url).then(() => {
+          status.className = 'status playing';
+          status.textContent = '▶ Tocando DASH';
+          video.play().catch(() => {});
+        }).catch(err => {
+          status.className = 'status error';
+          status.textContent = '❌ Erro DASH: ' + err.message.substring(0, 50);
+        });
+      } else {
+        // HLS
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = canal.url;
+          status.textContent = '▶ Tocando (HLS nativo)';
+        } else if (Hls.isSupported()) {
+          hls = new Hls();
+          hls.loadSource(canal.url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            status.className = 'status playing';
+            status.textContent = '▶ Tocando HLS';
+            video.play().catch(() => {});
+          });
+          hls.on(Hls.Events.ERROR, (e, data) => {
+            if (data.fatal) {
+              status.className = 'status error';
+              status.textContent = '❌ Erro HLS';
+            }
+          });
+        } else {
+          status.className = 'status error';
+          status.textContent = '❌ Não suportado';
+        }
+      }
+    }
+
+    function togglePlay() { if (video.paused) video.play(); else video.pause(); }
+    function toggleMute() { video.muted = !video.muted; }
+
+    // Renderiza botões
+    const container = document.getElementById('canais');
+    canais.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'canal-btn';
+      btn.textContent = c.nome;
+      btn.onclick = () => {
+        document.querySelectorAll('.canal-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        carregarCanal(c);
+      };
+      container.appendChild(btn);
+    });
+
+    // Carrega o SporTV por padrão
+    carregarCanal(canais[0]);
+    document.querySelector('.canal-btn')?.classList.add('active');
+  </script>
+</body>
+</html>

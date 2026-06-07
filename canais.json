@@ -1,0 +1,152 @@
+[
+  {
+    "nome": "Globo SP",
+    "url": "https://nossoplayeronlinehd.ink/tv/globosp",
+    "iframe": true
+  },
+  {
+    "nome": "Globo RJ",
+    "url": "https://nossoplayeronlinehd.ink/tv/globorj",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv 2",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv2",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv 3",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv3",
+    "iframe": true
+  },
+  {
+    "nome": "ESPN",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn",
+    "iframe": true
+  },
+  {
+    "nome": "ESPN 2",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn2",
+    "iframe": true
+  },
+  {
+    "nome": "ESPN 3",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn3",
+    "iframe": true
+  },
+  {
+    "nome": "ESPN 4",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn4",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 2",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere2",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 3",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere3",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 4",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere4",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 5",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere5",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 6",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere6",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 7",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere7",
+    "iframe": true
+  },
+  {
+    "nome": "Combate",
+    "url": "https://nossoplayeronlinehd.ink/tv/combate",
+    "iframe": true
+  },
+  {
+    "nome": "Band TV",
+    "url": "https://nossoplayeronlinehd.ink/tv/band",
+    "iframe": true
+  },
+  {
+    "nome": "BandSports",
+    "url": "https://nossoplayeronlinehd.ink/tv/bandsports",
+    "iframe": true
+  },
+  {
+    "nome": "SBT",
+    "url": "https://nossoplayeronlinehd.ink/tv/sbt",
+    "iframe": true
+  },
+  {
+    "nome": "Record TV",
+    "url": "https://nossoplayeronlinehd.ink/tv/record",
+    "iframe": true
+  },
+  {
+    "nome": "TNT",
+    "url": "https://nossoplayeronlinehd.ink/tv/tnt",
+    "iframe": true
+  },
+  {
+    "nome": "Space",
+    "url": "https://nossoplayeronlinehd.ink/tv/space",
+    "iframe": true
+  },
+  {
+    "nome": "Paramount+",
+    "url": "https://nossoplayeronlinehd.ink/tv/paramountplus",
+    "iframe": true
+  },
+  {
+    "nome": "Prime Video",
+    "url": "https://nossoplayeronlinehd.ink/tv/primevideo",
+    "iframe": true
+  },
+  {
+    "nome": "UFC Fight Pass",
+    "url": "https://nossoplayeronlinehd.ink/tv/ufcfightpass",
+    "iframe": true
+  },
+  {
+    "nome": "XSports",
+    "url": "https://nossoplayeronlinehd.ink/tv/xsports",
+    "iframe": true
+  },
+  {
+    "nome": "BBB 26",
+    "url": "https://nossoplayeronlinehd.ink/tv/bbb",
+    "iframe": true
+  },
+  {
+    "nome": "SporTV (DASH)",
+    "url": "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8",
+    "tipo": "hls"
+  },
+  {
+    "nome": "Amazon Sat",
+    "url": "https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8",
+    "tipo": "hls"
+  }
+]

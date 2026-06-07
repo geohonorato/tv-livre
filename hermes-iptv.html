@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes IPTV - Todos os Canais</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/shaka-player@2.2.1/dist/shaka-player.compiled.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 5px; }
+    .sub { color: #64748b; font-size: 0.85rem; margin-bottom: 20px; }
+    .layout {
+      display: flex;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      background: #131825;
+      border-radius: 12px;
+      padding: 15px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin: 15px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sidebar h2:first-child { margin-top: 0; }
+    .canal-btn {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      margin-bottom: 4px;
+      background: #1e293b;
+      color: #94a3b8;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .canal-btn:hover { background: #334155; color: white; }
+    .canal-btn.active { background: #e11d48; color: white; }
+    .player-area {
+      flex: 1;
+    }
+    .player-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+    video { width: 100%; display: block; background: #000; max-height: 70vh; }
+    .status {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .status.playing { color: #22c55e; }
+    .status.error { color: #ef4444; }
+    .status.info { color: #3b82f6; }
+    .btn-group { margin-top: 10px; display: flex; gap: 10px; }
+    .btn-group button {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-group button:hover { background: #334155; color: white; }
+    .search-box {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      background: #1e293b;
+      color: white;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+    .search-box:focus { outline: none; border-color: #e11d48; }
+  </style>
+</head>
+<body>
+  <h1>📺 Hermes IPTV</h1>
+  <p class="sub">Canais via engenharia reversa — futemax + sporturbo + listas IPTV</p>
+
+  <div class="layout">
+    <div class="sidebar">
+      <input class="search-box" id="search" placeholder="Buscar canal..." oninput="filtrar()">
+      
+      <h2>📡 futemax.cfd</h2>
+      <div id="canais-futemax"></div>
+
+      <h2>⚙️ sporturbo</h2>
+      <div id="canais-sporturbo"></div>
+
+      <h2>🌐 Lista IPTV</h2>
+      <div id="canais-iptv"></div>
+    </div>
+
+    <div class="player-area">
+      <div class="player-container">
+        <video id="player" controls autoplay></video>
+      </div>
+      <div class="status" id="status">⏳ Selecione um canal</div>
+      <div class="btn-group">
+        <button onclick="togglePlay()">⏯ Play/Pause</button>
+        <button onclick="toggleMute()">🔇 Mudo</button>
+        <button onclick="fullscreen()">⛶ Tela cheia</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== CANAIS =====
+    const futemaxCanais = [
+      { nome: 'Globo SP', url: 'https://nossoplayeronlinehd.ink/tv/globosp' },
+      { nome: 'Globo RJ', url: 'https://nossoplayeronlinehd.ink/tv/globorj' },
+      { nome: 'Sportv', url: 'https://nossoplayeronlinehd.ink/tv/sportv' },
+      { nome: 'Sportv 2', url: 'https://nossoplayeronlinehd.ink/tv/sportv2' },
+      { nome: 'Sportv 3', url: 'https://nossoplayeronlinehd.ink/tv/sportv3' },
+      { nome: 'ESPN', url: 'https://nossoplayeronlinehd.ink/tv/espn' },
+      { nome: 'ESPN 2', url: 'https://nossoplayeronlinehd.ink/tv/espn2' },
+      { nome: 'ESPN 3', url: 'https://nossoplayeronlinehd.ink/tv/espn3' },
+      { nome: 'ESPN 4', url: 'https://nossoplayeronlinehd.ink/tv/espn4' },
+      { nome: 'Premiere', url: 'https://nossoplayeronlinehd.ink/tv/premiere' },
+      { nome: 'Premiere 2', url: 'https://nossoplayeronlinehd.ink/tv/premiere2' },
+      { nome: 'Premiere 3', url: 'https://nossoplayeronlinehd.ink/tv/premiere3' },
+      { nome: 'Premiere 4', url: 'https://nossoplayeronlinehd.ink/tv/premiere4' },
+      { nome: 'Premiere 5', url: 'https://nossoplayeronlinehd.ink/tv/premiere5' },
+      { nome: 'Premiere 6', url: 'https://nossoplayeronlinehd.ink/tv/premiere6' },
+      { nome: 'Premiere 7', url: 'https://nossoplayeronlinehd.ink/tv/premiere7' },
+      { nome: 'Combate', url: 'https://nossoplayeronlinehd.ink/tv/combate' },
+      { nome: 'Band TV', url: 'https://nossoplayeronlinehd.ink/tv/band' },
+      { nome: 'BandSports', url: 'https://nossoplayeronlinehd.ink/tv/bandsports' },
+      { nome: 'SBT', url: 'https://nossoplayeronlinehd.ink/tv/sbt' },
+      { nome: 'Record TV', url: 'https://nossoplayeronlinehd.ink/tv/record' },
+      { nome: 'TNT', url: 'https://nossoplayeronlinehd.ink/tv/tnt' },
+      { nome: 'Space', url: 'https://nossoplayeronlinehd.ink/tv/space' },
+      { nome: 'Paramount+', url: 'https://nossoplayeronlinehd.ink/tv/paramountplus' },
+      { nome: 'Prime Video', url: 'https://nossoplayeronlinehd.ink/tv/primevideo' },
+      { nome: 'UFC Fight Pass', url: 'https://nossoplayeronlinehd.ink/tv/ufcfightpass' },
+      { nome: 'XSports', url: 'https://nossoplayeronlinehd.ink/tv/xsports' },
+      { nome: 'BBB 26', url: 'https://nossoplayeronlinehd.ink/tv/bbb' },
+    ];
+
+    const sporturboCanais = [
+      { nome: 'SporTV (DASH)', url: atob('aHR0cHM6Ly9vdHRlLmxpdmUuZmx5Lnd3LmFpdi1jZG4ubmV0L2dydS1uaXRyby9saXZlL2NsaWVudHMvZGFzaC9lbmMvbTdkdXZuazJidS9vdXQvdjEvZDFhZDY5MTE4YjU2NDczMDliMWViNzIxM2FmZmRiM2QvY2VuYy5tcGQ='), tipo: 'dash' },
+    ];
+
+    const iptvCanais = [
+      { nome: 'GE Fast (Globo Esp.)', url: 'https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8', tipo: 'hls' },
+      { nome: 'Globo Bahia', url: 'http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8', tipo: 'hls' },
+      { nome: 'Amazon Sat', url: 'https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8', tipo: 'hls' },
+      { nome: 'Premiere 1', url: 'https://stm.sinalmycn.com/20000/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: 'Premiere 2', url: 'https://stm.sinalmycn.com/20003/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: 'Premiere 3', url: 'https://stm.sinalmycn.com/20006/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: 'SporTV (token)', url: 'https://stm.sinalmycn.com/21000/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: 'SporTV 2 (token)', url: 'https://stm.sinalmycn.com/21003/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+      { nome: 'SporTV 3 (token)', url: 'https://stm.sinalmycn.com/21006/video.m3u8?token=EkP2qSi13ckjQRLSIDoxI5rMZsF5rZyEYzqWjxD248ScEUPYQ0', tipo: 'hls' },
+    ];
+
+    // ===== PLAYER =====
+    const video = document.getElementById('player');
+    const status = document.getElementById('status');
+    let hls = null;
+    let shakaPlayer = null;
+
+    function carregar(canal) {
+      status.className = 'status';
+      status.textContent = '⏳ ' + canal.nome + '...';
+      if (hls) { hls.destroy(); hls = null; }
+      if (shakaPlayer) { shakaPlayer.destroy(); shakaPlayer = null; }
+      video.src = '';
+
+      if (canal.url.includes('nossoplayeronlinehd')) {
+        // futemax.cfd - abre em iframe. Use uBlock Origin pra bloquear redirects!
+        status.className = 'status info';
+        status.textContent = '🔗 ' + canal.nome + ' (uBlock bloqueia redirects)';
+        video.style.display = 'none';
+        let iframe = document.querySelector('#player-iframe');
+        if (!iframe) {
+          iframe = document.createElement('iframe');
+          iframe.id = 'player-iframe';
+          iframe.style.width = '100%';
+          iframe.style.height = '70vh';
+          iframe.style.border = 'none';
+          document.querySelector('.player-container').appendChild(iframe);
+        }
+        iframe.style.display = 'block';
+        iframe.src = canal.url;
+        return;
+      }
+
+      document.querySelector('#player-iframe')?.remove();
+      video.style.display = 'block';
+
+      const tipo = canal.tipo || 'hls';
+
+      if (tipo === 'dash') {
+        shakaPlayer = new shaka.Player(video);
+        shakaPlayer.configure({ streaming: { rebufferingGoal: 5 } });
+        shakaPlayer.load(canal.url).then(() => {
+          status.className = 'status playing';
+          status.textContent = '▶ Tocando ' + canal.nome;
+          video.play().catch(() => {});
+        }).catch(err => {
+          status.className = 'status error';
+          status.textContent = '❌ Erro: ' + err.message.substring(0, 60);
+        });
+      } else {
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = canal.url;
+          status.textContent = '▶ Tocando ' + canal.nome;
+        } else if (Hls.isSupported()) {
+          hls = new Hls();
+          hls.loadSource(canal.url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            status.className = 'status playing';
+            status.textContent = '▶ Tocando ' + canal.nome;
+            video.play().catch(() => {});
+          });
+          hls.on(Hls.Events.ERROR, (e, data) => {
+            if (data.fatal) {
+              status.className = 'status error';
+              status.textContent = '❌ Erro em ' + canal.nome;
+            }
+          });
+        } else {
+          status.className = 'status error';
+          status.textContent = '❌ Navegador não suporta HLS';
+        }
+      }
+    }
+
+    function togglePlay() { if (video.paused) video.play(); else video.pause(); }
+    function toggleMute() { video.muted = !video.muted; }
+    function fullscreen() { video.requestFullscreen(); }
+
+    function filtrar() {
+      const q = document.getElementById('search').value.toLowerCase();
+      document.querySelectorAll('.canal-btn').forEach(btn => {
+        btn.style.display = btn.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+      });
+    }
+
+    function renderCanais(lista, containerId) {
+      const container = document.getElementById(containerId);
+      lista.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'canal-btn';
+        btn.textContent = c.nome;
+        btn.onclick = () => {
+          document.querySelectorAll('.canal-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          carregar(c);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    renderCanais(futemaxCanais, 'canais-futemax');
+    renderCanais(sporturboCanais, 'canais-sporturbo');
+    renderCanais(iptvCanais, 'canais-iptv');
+  </script>
+</body>
+</html>
