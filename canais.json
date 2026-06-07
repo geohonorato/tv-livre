@@ -1,123 +1,137 @@
-{
-  "atualizado": "2026-06-07T16:32:23.361Z",
-  "fontes": {
-    "futemax": [
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere"
-      },
-      {
-        "nome": "Sbt",
-        "url": "https://nossoplayeronlinehd.ink/tv/sbt"
-      },
-      {
-        "nome": "Sportv",
-        "url": "https://nossoplayeronlinehd.ink/tv/sportv"
-      },
-      {
-        "nome": "Sportv",
-        "url": "https://nossoplayeronlinehd.ink/tv/sportv2"
-      },
-      {
-        "nome": "Sportv",
-        "url": "https://nossoplayeronlinehd.ink/tv/sportv3"
-      },
-      {
-        "nome": "Espn",
-        "url": "https://nossoplayeronlinehd.ink/tv/espn"
-      },
-      {
-        "nome": "Espn",
-        "url": "https://nossoplayeronlinehd.ink/tv/espn2"
-      },
-      {
-        "nome": "Espn",
-        "url": "https://nossoplayeronlinehd.ink/tv/espn3"
-      },
-      {
-        "nome": "Espn",
-        "url": "https://nossoplayeronlinehd.ink/tv/espn4"
-      },
-      {
-        "nome": "Globo",
-        "url": "https://nossoplayeronlinehd.ink/tv/globosp"
-      },
-      {
-        "nome": "Combate",
-        "url": "https://nossoplayeronlinehd.ink/tv/combate"
-      },
-      {
-        "nome": "Space",
-        "url": "https://nossoplayeronlinehd.ink/tv/space"
-      },
-      {
-        "nome": "Recordtv",
-        "url": "https://nossoplayeronlinehd.ink/tv/record"
-      },
-      {
-        "nome": "Band",
-        "url": "https://nossoplayeronlinehd.ink/tv/band"
-      },
-      {
-        "nome": "Bandsports",
-        "url": "https://nossoplayeronlinehd.ink/tv/bandsports"
-      },
-      {
-        "nome": "Globo",
-        "url": "https://nossoplayeronlinehd.ink/tv/globorj"
-      },
-      {
-        "nome": "Tnt",
-        "url": "https://nossoplayeronlinehd.ink/tv/tnt"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere7"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere6"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere5"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere4"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere3"
-      },
-      {
-        "nome": "Premiere",
-        "url": "https://nossoplayeronlinehd.ink/tv/premiere2"
-      }
-    ],
-    "sporturbo": [
-      {
-        "nome": "SporTV (DASH)",
-        "url": "",
-        "tipo": "dash"
-      }
-    ],
-    "iptv": [
-      {
-        "nome": "GE Fast",
-        "url": "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8",
-        "tipo": "hls"
-      },
-      {
-        "nome": "Globo Bahia",
-        "url": "http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
-        "tipo": "hls"
-      },
-      {
-        "nome": "Amazon Sat",
-        "url": "https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8",
-        "tipo": "hls"
-      }
-    ]
+[
+  {
+    "nome": "Premiere Fc Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere",
+    "iframe": true
+  },
+  {
+    "nome": "Sbt Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/sbt",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv 2 Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv2",
+    "iframe": true
+  },
+  {
+    "nome": "Sportv 3 Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/sportv3",
+    "iframe": true
+  },
+  {
+    "nome": "Espn Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn",
+    "iframe": true
+  },
+  {
+    "nome": "Espn 2 Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn2",
+    "iframe": true
+  },
+  {
+    "nome": "Espn 3 Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn3",
+    "iframe": true
+  },
+  {
+    "nome": "Espn 4 Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/espn4",
+    "iframe": true
+  },
+  {
+    "nome": "Globo Sp Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/globosp",
+    "iframe": true
+  },
+  {
+    "nome": "Combate",
+    "url": "https://nossoplayeronlinehd.ink/tv/combate",
+    "iframe": true
+  },
+  {
+    "nome": "Space Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/space",
+    "iframe": true
+  },
+  {
+    "nome": "Recordtv Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/record",
+    "iframe": true
+  },
+  {
+    "nome": "Band Tv Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/band",
+    "iframe": true
+  },
+  {
+    "nome": "Bandsports Esportes Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/bandsports",
+    "iframe": true
+  },
+  {
+    "nome": "Globo Rj Futebol Noticias E Programas Em",
+    "url": "https://nossoplayeronlinehd.ink/tv/globorj",
+    "iframe": true
+  },
+  {
+    "nome": "Tnt Futebol Internacional Em Hd No",
+    "url": "https://nossoplayeronlinehd.ink/tv/tnt",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 7 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere7",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 6 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere6",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 5 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere5",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 4 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere4",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 3 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere3",
+    "iframe": true
+  },
+  {
+    "nome": "Premiere 2 Em Hd",
+    "url": "https://nossoplayeronlinehd.ink/tv/premiere2",
+    "iframe": true
+  },
+  {
+    "nome": "SporTV (DASH)",
+    "url": "https://otte.live.fly.ww.aiv-cdn.net/gru-nitro/live/clients/dash/enc/m7duvnk2bu/out/v1/d1ade69118b5647309b1eb7213affdb3d/cenc.mpd",
+    "tipo": "dash"
+  },
+  {
+    "nome": "GE Fast (Globo)",
+    "url": "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8",
+    "tipo": "hls"
+  },
+  {
+    "nome": "Globo Bahia",
+    "url": "http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
+    "tipo": "hls"
+  },
+  {
+    "nome": "Amazon Sat",
+    "url": "https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8",
+    "tipo": "hls"
   }
-}
+]
