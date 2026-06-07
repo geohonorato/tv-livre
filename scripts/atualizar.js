@@ -25,6 +25,37 @@ function fetchHtml(targetUrl) {
   });
 }
 
+function cleanName(name) {
+  if (!name) return "";
+  let clean = name;
+  // Remove suffixes
+  clean = clean.replace(/\b(?:Esportes|Futebol|Noticias|E|Programas|Internacional|Ao Vivo|Online|Assista|Em|Hd|No|Fc)\b/gi, '').trim();
+  // Replace double spaces
+  clean = clean.replace(/\s+/g, ' ');
+
+  // Specific corrections
+  const replacements = [
+    { regex: /\bsportv\b/i, value: "SporTV" },
+    { regex: /\bespn\b/i, value: "ESPN" },
+    { regex: /\bsbt\b/i, value: "SBT" },
+    { regex: /\btnt\b/i, value: "TNT" },
+    { regex: /\bband\s*tv\b/i, value: "Band TV" },
+    { regex: /\bbandsports\b/i, value: "BandSports" },
+    { regex: /\brecordtv\b/i, value: "Record TV" },
+    { regex: /\brecord\s*tv\b/i, value: "Record TV" },
+    { regex: /\bglobo\s*sp\b/i, value: "Globo SP" },
+    { regex: /\bglobo\s*rj\b/i, value: "Globo RJ" },
+    { regex: /\bge\s*fast\b/i, value: "GE Fast" },
+    { regex: /\bpremiere\s*fc\b/i, value: "Premiere" }
+  ];
+
+  replacements.forEach(r => {
+    clean = clean.replace(r.regex, r.value);
+  });
+
+  return clean.trim();
+}
+
 async function updateChannels() {
   console.log('=== Atualizando canais IPTV ===');
 
@@ -49,7 +80,8 @@ async function updateChannels() {
         const parsed = url.parse(channelUrl);
         const pathPart = parsed.pathname.replace(/^\/|\/$/g, '');
         const namePart = pathPart.replace(/-ao-vivo|-assista|-online/g, '').replace(/-[^-]+$/, '');
-        const nome = namePart.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        let nome = namePart.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        nome = cleanName(nome);
 
         console.log(`  -> Buscando player para: ${nome}`);
         const channelHtml = await fetchHtml(channelUrl);

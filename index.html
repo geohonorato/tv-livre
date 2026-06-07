@@ -131,19 +131,19 @@
   </div>
 
   <!-- ========== HERO SECTION ========== -->
-  <header class="relative w-full h-[80vh] md:h-[92vh] bg-surface flex items-center overflow-hidden" id="hero-section">
+  <header class="relative w-full min-h-[75vh] md:min-h-[85vh] bg-surface flex flex-col justify-end pb-12 md:pb-20 pt-24 overflow-hidden" id="hero-section">
     <div class="absolute inset-0 w-full h-full transform scale-105 transition-transform duration-[20s] ease-out hover:scale-100">
       <div class="w-full h-full bg-cover bg-center" id="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1920&q=80');"></div>
     </div>
     <div class="absolute inset-0 hero-vignette mix-blend-multiply"></div>
     <div class="absolute inset-0 grain-overlay"></div>
     <div class="absolute bottom-0 w-full h-48 hero-bottom-fade"></div>
-    <div class="relative z-10 px-4 md:px-12 w-full md:w-2/3 lg:w-1/2 pt-32">
+    <div class="relative z-10 px-4 md:px-12 w-full md:w-2/3 lg:w-1/2 pt-20">
       <div class="flex items-center gap-3 mb-6">
         <span class="bg-primary-container text-on-primary-container text-[10px] font-extrabold px-2 py-1 rounded shadow-[0_0_12px_rgba(208,188,255,0.4)] tracking-widest">AO VIVO</span>
         <span class="text-xs font-semibold tracking-widest text-outline uppercase" id="hero-source">TV Livre</span>
       </div>
-      <h1 class="text-5xl md:text-8xl font-extrabold mb-4 tracking-tighter drop-shadow-2xl text-white leading-none" id="hero-title">TV Livre</h1>
+      <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 tracking-tighter drop-shadow-2xl text-white leading-none" id="hero-title">TV Livre</h1>
       <div class="flex items-center gap-4 mb-6 text-sm font-medium text-on-surface-variant drop-shadow-md">
         <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-sm">star</span> 4.9</span>
         <span>|</span>
@@ -151,15 +151,15 @@
         <span>|</span>
         <span class="border border-outline-variant px-1 rounded text-[10px] uppercase">HD</span>
       </div>
-      <p class="text-lg md:text-xl text-on-surface font-medium mb-10 drop-shadow-md max-w-2xl leading-relaxed" id="hero-desc">
+      <p class="text-lg md:text-xl text-on-surface font-medium mb-6 drop-shadow-md max-w-2xl leading-relaxed" id="hero-desc">
         Assista seus canais favoritos ao vivo, gratuitamente. Atualizado automaticamente com a melhor seleção de canais brasileiros.
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
-        <button class="flex items-center justify-center gap-2 bg-gradient-primary text-white px-8 py-4 rounded-lg font-bold text-lg hover:shadow-[0_0_20px_rgba(208,188,255,0.5)] transition-all transform hover:-translate-y-1" id="hero-play-btn" onclick="playHeroChannel()">
+        <button class="flex items-center justify-center gap-2 bg-gradient-primary text-white px-6 py-3 text-base sm:px-8 sm:py-3.5 sm:text-lg rounded-lg font-bold hover:shadow-[0_0_20px_rgba(208,188,255,0.5)] transition-all transform hover:-translate-y-1" id="hero-play-btn" onclick="playHeroChannel()">
           <span class="material-symbols-outlined">play_arrow</span>
           Assistir Agora
         </button>
-        <button class="flex items-center justify-center gap-2 bg-surface-container/40 text-white border border-outline-variant/30 px-8 py-4 rounded-lg font-bold text-lg hover:bg-surface-container/60 transition-colors backdrop-blur-md" onclick="switchTab('channels')">
+        <button class="flex items-center justify-center gap-2 bg-surface-container/40 text-white border border-outline-variant/30 px-6 py-3 text-base sm:px-8 sm:py-3.5 sm:text-lg rounded-lg font-bold hover:bg-surface-container/60 transition-colors backdrop-blur-md" onclick="switchTab('channels')">
           <span class="material-symbols-outlined">live_tv</span>
           Ver Canais
         </button>
@@ -168,7 +168,7 @@
   </header>
 
   <!-- ========== MAIN CONTENT ========== -->
-  <main class="relative z-20 pb-24 -mt-20 md:-mt-32" id="main-content">
+  <main class="relative z-20 pb-24 -mt-6 md:-mt-12" id="main-content">
 
     <!-- HOME TAB -->
     <div id="tab-home">
@@ -179,10 +179,10 @@
           <span class="bg-primary-container text-on-primary-container text-[10px] px-2 py-1 rounded font-extrabold tracking-widest shadow-[0_0_8px_rgba(208,188,255,0.3)]">AO VIVO</span>
         </h2>
         <div class="px-4 md:px-12 flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 pt-2" id="rail-esportes">
-          <div class="skeleton flex-none w-56 h-48"></div>
-          <div class="skeleton flex-none w-56 h-48"></div>
-          <div class="skeleton flex-none w-56 h-48"></div>
-          <div class="skeleton flex-none w-56 h-48"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
         </div>
       </div>
 
@@ -190,9 +190,9 @@
       <div class="mb-10 md:mb-16">
         <h2 class="px-4 md:px-12 text-2xl md:text-3xl font-bold mb-4 tracking-tight">TV Aberta</h2>
         <div class="px-4 md:px-12 flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 pt-2" id="rail-aberta">
-          <div class="skeleton flex-none w-64 h-40"></div>
-          <div class="skeleton flex-none w-64 h-40"></div>
-          <div class="skeleton flex-none w-64 h-40"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
         </div>
       </div>
 
@@ -200,9 +200,9 @@
       <div class="mb-10 md:mb-16">
         <h2 class="px-4 md:px-12 text-2xl md:text-3xl font-bold mb-4 tracking-tight">Filmes & Entretenimento</h2>
         <div class="px-4 md:px-12 flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 pt-2" id="rail-filmes">
-          <div class="skeleton flex-none w-64 h-40"></div>
-          <div class="skeleton flex-none w-64 h-40"></div>
-          <div class="skeleton flex-none w-64 h-40"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
         </div>
       </div>
 
@@ -213,8 +213,8 @@
           <span class="bg-primary-container text-on-primary-container text-[10px] px-2 py-1 rounded font-extrabold tracking-widest">PPV</span>
         </h2>
         <div class="px-4 md:px-12 flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 pt-2" id="rail-premiere">
-          <div class="skeleton flex-none w-56 h-48"></div>
-          <div class="skeleton flex-none w-56 h-48"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
+          <div class="skeleton flex-none w-56 md:w-64 aspect-[4/3]"></div>
         </div>
       </div>
 
@@ -222,8 +222,8 @@
       <div class="mb-10 md:mb-16">
         <h2 class="px-4 md:px-12 text-2xl md:text-3xl font-bold mb-4 tracking-tight">Outros Canais</h2>
         <div class="px-4 md:px-12 flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 pt-2" id="rail-outros">
-          <div class="skeleton flex-none w-64 h-40"></div>
-          <div class="skeleton flex-none w-64 h-40"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
+          <div class="skeleton flex-none w-64 md:w-72 aspect-video"></div>
         </div>
       </div>
     </div>
@@ -351,11 +351,46 @@
       return 'outros';
     }
 
+    function sanitizeName(name) {
+      if (!name) return "";
+      let clean = name;
+      // Remove suffixes
+      clean = clean.replace(/\b(?:Esportes|Futebol|Noticias|E|Programas|Internacional|Ao Vivo|Online|Assista|Em|Hd|No|Fc)\b/gi, '').trim();
+      // Replace double spaces
+      clean = clean.replace(/\s+/g, ' ');
+
+      // Specific corrections
+      const replacements = [
+        { regex: /\bsportv\b/i, value: "SporTV" },
+        { regex: /\bespn\b/i, value: "ESPN" },
+        { regex: /\bsbt\b/i, value: "SBT" },
+        { regex: /\btnt\b/i, value: "TNT" },
+        { regex: /\bband\s*tv\b/i, value: "Band TV" },
+        { regex: /\bbandsports\b/i, value: "BandSports" },
+        { regex: /\brecordtv\b/i, value: "Record TV" },
+        { regex: /\brecord\s*tv\b/i, value: "Record TV" },
+        { regex: /\bglobo\s*sp\b/i, value: "Globo SP" },
+        { regex: /\bglobo\s*rj\b/i, value: "Globo RJ" },
+        { regex: /\bge\s*fast\b/i, value: "GE Fast" },
+        { regex: /\bpremiere\s*fc\b/i, value: "Premiere" }
+      ];
+
+      replacements.forEach(r => {
+        clean = clean.replace(r.regex, r.value);
+      });
+
+      return clean.trim();
+    }
+
     // ======================== INIT ========================
     async function init() {
       try {
         const resp = await fetch('canais.json?_=' + Date.now());
-        state.channels = await resp.json();
+        const data = await resp.json();
+        state.channels = data.map(c => {
+          c.nome = sanitizeName(c.nome);
+          return c;
+        });
         document.getElementById('channel-count-badge').textContent = `${state.channels.length} canais`;
         renderHome();
         toast('📺', `${state.channels.length} canais carregados`);
