@@ -369,26 +369,28 @@
     }
 
     const LOGOS = {
-      'sportv': 'https://upload.wikimedia.org/wikipedia/commons/e/ec/SporTV_logo.svg',
-      'sportv 2': 'https://upload.wikimedia.org/wikipedia/commons/7/70/SporTV2_logo.png',
-      'sportv 3': 'https://upload.wikimedia.org/wikipedia/commons/3/30/SporTV3_logo.png',
-      'espn': 'https://upload.wikimedia.org/wikipedia/commons/a/a2/ESPN_wordmark.svg',
-      'espn 2': 'https://upload.wikimedia.org/wikipedia/commons/e/e8/ESPN2.svg',
-      'espn 3': 'https://upload.wikimedia.org/wikipedia/commons/1/15/ESPN3_logo.png',
-      'espn 4': 'https://upload.wikimedia.org/wikipedia/commons/f/fb/ESPN4.png',
-      'globo': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
-      'globo sp': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
-      'globo rj': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
-      'globo bahia': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
-      'ge fast': 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Rede_Globo_logo.svg',
-      'sbt': 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Logo_SBT_2024.png',
-      'record tv': 'https://upload.wikimedia.org/wikipedia/commons/9/91/Record_TV_logo.png',
-      'band tv': 'https://upload.wikimedia.org/wikipedia/commons/8/87/Band_TV_logo.png',
-      'bandsports': 'https://upload.wikimedia.org/wikipedia/commons/9/98/Bandsports_2016.svg',
-      'tnt': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/TNT_Logo_2016.svg',
-      'space': 'https://upload.wikimedia.org/wikipedia/commons/8/85/Canal_Space.png',
-      'combate': 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Logo_Canal_Combate.png',
-      'premiere': 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Logo_premiere.png',
+      'sportv': 'logos/sportv.png',
+      'sportv 2': 'logos/sportv2.png',
+      'sportv 3': 'logos/sportv3.png',
+      'espn': 'logos/espn.png',
+      'espn 2': 'logos/espn2.png',
+      'espn 3': 'logos/espn3.png',
+      'espn 4': 'logos/espn4.png',
+      'espn extra': 'logos/espnextra.png',
+      'globo': 'logos/globo.png',
+      'globo sp': 'logos/globo.png',
+      'globo rj': 'logos/globo.png',
+      'globo bahia': 'logos/globo.png',
+      'ge fast': 'logos/globo.png',
+      'sbt': 'logos/sbt.png',
+      'record tv': 'logos/recordtv.png',
+      'band tv': 'logos/bandtv.png',
+      'bandsports': 'logos/bandsports.png',
+      'tnt': 'logos/tnt.png',
+      'tnt sports': 'logos/tntsports.png',
+      'space': 'logos/space.png',
+      'combate': 'logos/combate.png',
+      'premiere': 'logos/premiere.png',
     };
 
     const BACKDROPS = {
@@ -427,7 +429,10 @@
       }
       if (clean.includes('globo') || clean.includes('ge fast')) return LOGOS['globo'];
       if (clean.includes('sbt')) return LOGOS['sbt'];
-      if (clean.includes('tnt')) return LOGOS['tnt'];
+      if (clean.includes('tnt')) {
+        if (clean.includes('sports')) return LOGOS['tnt sports'];
+        return LOGOS['tnt'];
+      }
       if (clean.includes('space')) return LOGOS['space'];
       if (clean.includes('record')) return LOGOS['record tv'];
       if (clean.includes('band tv') || clean.includes('band')) {
