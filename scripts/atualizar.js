@@ -47,7 +47,7 @@ function desofuscarSporturbo(html, subtract) {
 
 async function updateChannels() {
   console.log('=== Atualizando canais IPTV ===');
-  const canaisLista = [];
+  let canaisLista = [];
 
   // ===== 1. Varrer futemax5.biz (NOVO) =====
   console.log('[1/4] Varrendo futemax5.biz...');
@@ -81,17 +81,19 @@ async function updateChannels() {
     console.log(`  -> ${canaisLista.length} canais coletados do futemax5.biz.`);
   }
 
-  // Se a varredura falhou ou veio muito pouco, carregar do arquivo existente
+  // Se a varredura falhou ou veio muito pouco, manter o arquivo existente intacto
   if (canaisLista.length < 30) {
-    console.log(`  ⚠ Apenas ${canaisLista.length} canais encontrados. Carregando do canais.json existente...`);
+    console.log(`  ⚠ Apenas ${canaisLista.length} canais encontrados na varredura.`);
+    console.log('  → Mantendo canais.json existente sem alterações.');
     try {
       const existingData = JSON.parse(fs.readFileSync('canais.json', 'utf-8'));
       if (Array.isArray(existingData) && existingData.length > 30) {
-        canaisLista = existingData.filter(c => c.iframe);
-        console.log(`  -> ${canaisLista.length} canais carregados do arquivo existente.`);
+        console.log(`  → canais.json atual tem ${existingData.length} canais. Nenhuma alteração necessária.`);
+        console.log('=== Atualização finalizada (sem mudanças) ===');
+        return; // Sair sem sobrescrever
       }
     } catch (e) {
-      console.error('  -> Erro ao ler canais.json existente:', e.message);
+      console.error('  → Erro ao ler canais.json existente:', e.message);
     }
   }
 
