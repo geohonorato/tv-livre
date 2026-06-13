@@ -832,15 +832,47 @@
         modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
 
-        // Tentar pelo futemax5.biz como intermediário (funciona em file://)
-        // Extrair slug da URL do redecanais
-        const slugMatch = channel.url.match(/canal=([^&]+)/);
-        if (slugMatch) {
-          const slug = slugMatch[1];
-          iframe.src = 'https://futemax5.biz/assistir-' + slug + '-ao-vivo-em-hd-online';
-        } else {
-          iframe.src = channel.url;
-        }
+        // Extrair slug da URL do redecanais e traduzir pro slug do futemax5.biz
+        const redecanaisSlug = (channel.url.match(/canal=([^&]+)/) || [,''])[1];
+        // Mapeamento: slug redecanais -> slug futemax5.biz
+        const slugMap = {
+          'aie':'ae','adultswim':'adult-swim','amc':'amc','amcseries':'amc-series',
+          'animalplanet':'animal-planet','arte1':'arte1','axn':'axn','band':'band',
+          'bandnews':'band-news','bandsports':'band-sports','bis':'bis','boxkidstv':'box-kids',
+          'canalbrasil':'canal-brasil','off':'canal-off','cancaonova':'cancao-nova',
+          'cartoon':'cartoon-network','cartoonito':'cartoonito','cinemax':'cinemax',
+          'cnnbrasil':'cnn-brasil','cnnbrasilmoney':'cnn-brasil-money','combate':'ufc-combate',
+          'comedycentral':'comedy-central','curta':'curta','discovery':'discovery-channel',
+          'discoveryhomeihealth':'discovery-home-e-health','discoverykids':'discovery-kids',
+          'discoverysience':'discovery-science','discoverytheater':'discovery-theater',
+          'discoveryworld':'discovery-world','espn':'espn','espn2':'espn-2','espn3':'espn-3',
+          'espn4':'espn-4','espn5':'espn-5','espn6':'espn-6','filmearts':'filmarts',
+          'fishtv':'fishtv','foxsports2':'fox-sports-2','getv':'getv','globonews':'globo-news',
+          'gloob':'gloob','gloobinho':'gloobinho','gnt':'gnt','hbo':'hbo','hbo2':'hbo-2',
+          'hbofamily':'hbo-family','hbomundi':'hbo-mundi','hboplus':'hbo-plus','hbopop':'hbo-pop',
+          'hbosignature':'hbo-signature','hboxtreme':'hbo-xtreme','hgtv':'hgtv',
+          'history':'histoy-channel','history2':'histoy-2','investigacaodiscovery':'investigacao-discovery',
+          'lifetime':'lifetime','megapix':'megapix','modoviagem':'modoviagem',
+          'musicboxbrazil':'music-box-brazil','nick':'nickelodeon','nossofutebol':'nossofutebol',
+          'nossofutebolm1':'nosso-futebol-1','nossofutebolm2':'nosso-futebol-2',
+          'nossofutebolm3-sd':'nosso-futebol-3','paramount':'paramount-channel',
+          'premiere2':'premiere-2','premiere3':'premiere-3','premiere4':'premiere-4',
+          'premiere5':'premiere-5','premiere6':'premiere-6','premiere7':'premiere-7',
+          'premiereclubes':'premiere-clubes','primeboxbrazil':'primebox-brazil',
+          'record':'recordtv','recordnews':'record-news','redetv':'redetv','sbt':'sbt',
+          'sbtnews':'sbt-news','sonychannel':'sony','sonymovies':'sony-movies','space':'space',
+          'starplus1':'star-1','starplus2':'star-2','starplus3':'star-3',
+          'studiouniversal':'studio-universal','syfy':'syfy','tbs':'tbs','tcm':'tcm',
+          'telecineaction':'telecine-action','telecinecult':'telecine-cult',
+          'telecinefun':'telecine-fun','telecinepipoca':'telecine-pipoca',
+          'telecinepremium':'telecine-premium','telecinetouch':'telecine-touch','tlc':'tlc',
+          'tnt':'tnt','tntnovelas':'tnt-novelas','tntseries':'tnt-series','tooncast':'tooncast',
+          'travelboxbrazil':'travelbox-brazil','trutv':'trutv','tvegangelizar':'tv-evangelizar',
+          'tvgazeta':'tv-gazeta','tvmaranata':'tv-maranatatv-maanaim','ufcfightpass':'ufc-fight-pass',
+          'universal':'universal-tv','usa':'usa','viva':'viva','warner':'warner-tv','woohoo':'woohoo'
+        };
+        const futemaxSlug = slugMap[redecanaisSlug] || redecanaisSlug;
+        iframe.src = 'https://futemax5.biz/assistir-' + futemaxSlug + '-ao-vivo-em-hd-online';
         iframe.style.display = 'block';
         loading.style.display = 'none';
 
