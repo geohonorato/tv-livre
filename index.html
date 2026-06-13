@@ -809,6 +809,46 @@
       state.currentChannel = channel;
       state.currentIndex = state.channels.indexOf(channel);
 
+      // Turnstile: tentar iframe; se falhar, oferecer link direto
+      if (channel.turnstile) {
+        const modal = document.getElementById('player-modal');
+        const video = document.getElementById('player-video');
+        const iframe = document.getElementById('player-iframe');
+        const loading = document.getElementById('player-loading');
+        const controls = document.getElementById('player-controls');
+
+        document.getElementById('player-title').textContent = channel.nome;
+        document.getElementById('player-subtitle').textContent = 'Carregando...';
+        updatePlayerFavBtn();
+
+        if (state.hls) { state.hls.destroy(); state.hls = null; }
+        video.style.display = 'none';
+        iframe.style.display = 'none';
+        video.src = '';
+        loading.style.display = 'flex';
+        controls.style.display = 'none';
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        // Tentar pelo futemax5.biz como intermediário (funciona em file://)
+        // Extrair slug da URL do redecanais
+        const slugMatch = channel.url.match(/canal=([^&]+)/);
+        if (slugMatch) {
+          const slug = slugMatch[1];
+          iframe.src = 'https://futemax5.biz/assistir-' + slug + '-ao-vivo-em-hd-online';
+        } else {
+          iframe.src = channel.url;
+        }
+        iframe.style.display = 'block';
+        loading.style.display = 'none';
+
+        document.getElementById('player-subtitle').textContent = 'Clique em Opção 1 ou 2';
+        toast('📺', channel.nome);
+        return;
+      }
+
       // Pause rotation
       clearInterval(state.heroRotationInterval);
 
