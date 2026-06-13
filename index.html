@@ -809,37 +809,6 @@
       state.currentChannel = channel;
       state.currentIndex = state.channels.indexOf(channel);
 
-      // Turnstile: abrir em iframe no modal (o captcha aparece dentro)
-      if (channel.turnstile) {
-        const modal = document.getElementById('player-modal');
-        const video = document.getElementById('player-video');
-        const iframe = document.getElementById('player-iframe');
-        const loading = document.getElementById('player-loading');
-        const controls = document.getElementById('player-controls');
-
-        document.getElementById('player-title').textContent = channel.nome;
-        document.getElementById('player-subtitle').textContent = 'Resolva o captcha';
-        updatePlayerFavBtn();
-
-        if (state.hls) { state.hls.destroy(); state.hls = null; }
-        video.style.display = 'none';
-        iframe.style.display = 'none';
-        video.src = '';
-        loading.style.display = 'flex';
-        controls.style.display = 'none';
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-
-        iframe.style.display = 'block';
-        iframe.src = channel.url;
-        loading.style.display = 'none';
-
-        toast('🛡️', `Resolva o captcha para ${channel.nome}`);
-        return;
-      }
-
       // Pause rotation
       clearInterval(state.heroRotationInterval);
 
