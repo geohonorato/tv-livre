@@ -81,6 +81,20 @@ async function updateChannels() {
     console.log(`  -> ${canaisLista.length} canais coletados do futemax5.biz.`);
   }
 
+  // Se a varredura falhou ou veio muito pouco, carregar do arquivo existente
+  if (canaisLista.length < 30) {
+    console.log(`  ⚠ Apenas ${canaisLista.length} canais encontrados. Carregando do canais.json existente...`);
+    try {
+      const existingData = JSON.parse(fs.readFileSync('canais.json', 'utf-8'));
+      if (Array.isArray(existingData) && existingData.length > 30) {
+        canaisLista = existingData.filter(c => c.iframe);
+        console.log(`  -> ${canaisLista.length} canais carregados do arquivo existente.`);
+      }
+    } catch (e) {
+      console.error('  -> Erro ao ler canais.json existente:', e.message);
+    }
+  }
+
   // ===== 2. Extrair Sportv DASH (desofuscado) =====
   console.log('[2/4] Extraindo Sportv DASH (sporturbo)...');
   const sportvCanais = [
